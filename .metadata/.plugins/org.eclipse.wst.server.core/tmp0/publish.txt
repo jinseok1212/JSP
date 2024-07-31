@@ -1,0 +1,5 @@
+#Tomcat publish data
+#Wed Jul 31 09:02:21 KST 2024
+org.eclipse.jst.jee.server\:JSPBasic=C\:\\Users\\jin\\Desktop\\course\\jsp\\apache-tomcat-10.1.25\\wtpwebapps\\JSPBasic
+org.eclipse.jst.jee.server\:Busking=C\:\\Users\\jin\\Desktop\\course\\jsp\\apache-tomcat-10.1.25\\wtpwebapps\\Busking
+org.eclipse.jst.jee.server\:MyWeb=C\:\\Users\\jin\\Desktop\\course\\jsp\\apache-tomcat-10.1.25\\wtpwebapps\\MyWeb

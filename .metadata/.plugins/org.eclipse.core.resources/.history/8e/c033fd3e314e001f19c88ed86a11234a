@@ -1,0 +1,78 @@
+package com.busking.mypage.controller;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.json.JSONObject;
+
+import jakarta.servlet.http.HttpSession;
+
+@jakarta.servlet.annotation.WebServlet("/kakaoLogin")
+public class KakaoLoginServlet extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String code = request.getParameter("code");
+        String tokenUrl = "https://kauth.kakao.com/oauth/token";
+        String redirectUri = "http://localhost:8181/kakaoLogin";
+        String clientId = "YOUR_KAKAO_CLIENT_ID";
+        String clientSecret = "YOUR_KAKAO_CLIENT_SECRET";
+
+        String params = String.format(
+            "grant_type=authorization_code&client_id=%s&redirect_uri=%s&code=%s&client_secret=%s",
+            clientId, redirectUri, code, clientSecret);
+
+        URL url = new URL(tokenUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        conn.getOutputStream().write(params.getBytes());
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+
+        String result = sb.toString();
+        JSONObject json = new JSONObject(result);
+        String accessToken = json.getString("access_token");
+
+        String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
+        URL url2 = new URL(userInfoUrl);
+        HttpURLConnection conn2 = (HttpURLConnection) url2.openConnection();
+        conn2.setRequestMethod("GET");
+        conn2.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+        BufferedReader br2 = new BufferedReader(new InputStreamReader(conn2.getInputStream()));
+        StringBuilder sb2 = new StringBuilder();
+        String line2;
+        while ((line2 = br2.readLine()) != null) {
+            sb2.append(line2);
+        }
+
+        String userInfoResult = sb2.toString();
+        JSONObject userInfoJson = new JSONObject(userInfoResult);
+
+        String id = userInfoJson.getString("id");
+        String email = userInfoJson.getJSONObject("kakao_account").getString("email");
+        String nickname = userInfoJson.getJSONObject("properties").getString("nickname");
+
+        // 여기에서 사용자 정보를 DB에 저장하고 세션에 추가합니다.
+        HttpSession session = request.getSession();
+        session.setAttribute("userId", id);
+        session.setAttribute("userEmail", email);
+        session.setAttribute("userName", nickname);
+
+        response.sendRedirect(request.getContextPath() + "/index.main");
+    }
+}

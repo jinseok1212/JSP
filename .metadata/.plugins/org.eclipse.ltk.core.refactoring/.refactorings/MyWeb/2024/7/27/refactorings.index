@@ -1,0 +1,15 @@
+1719815704654	Extract interface 'BoardServiceImpli'
+1719815713947	Delete element
+1719815727210	Rename type 'BoardServiceImpli'
+1719815864510	Rename type 'BoardService'
+1719815873659	Rename type 'BoardServiceImpl'
+1719815894235	Delete element
+1719816067051	Delete element
+1719816072387	Delete element
+1719816084512	Delete element
+1719816088939	Delete element
+1719882932016	Copy package
+1719882951883	Delete element
+1719882960924	Rename package 'com.myweb.util.mybatis.copy'
+1719883358152	Rename compilation unit 'Board.java'
+1719905667145	Rename package 'com.myweb.filter'

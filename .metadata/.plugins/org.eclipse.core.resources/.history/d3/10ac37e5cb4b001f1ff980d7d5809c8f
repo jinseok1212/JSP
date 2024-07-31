@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<%@ include file="../include/header.jsp" %>
+<style>
+	.jinseok-wrap > .sum {margin: 0 auto;}
+	.jinseok-wrap > .sum > p {text-align: center;}
+	.jinseok-wrap {margin-top: 150px;}
+</style>
+<body>
+    <div class="jinseok-wrap" style="margin-top: 300px;">
+        <div class="sum">
+            <h3 class="title" style="text-align:center;">회원가입 성공</h3>
+            <p>회원가입이 성공적으로 완료되었습니다.</p>
+        </div>
+    </div>
+</body>
+<%@ include file="../include/footer.jsp" %>

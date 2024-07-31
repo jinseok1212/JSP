@@ -1,0 +1,85 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<%@ include file="../include/header.jsp" %>
+<body>
+    <div class="jinseok-wrap">
+        <div class="sum">
+            <div class="nav">
+                <ul>
+                    <li><span class="nav-title">마이페이지</span></li>
+                    <li><a href="${pageContext.request.contextPath}/mypage/getUserInfo.userinfo">내 정보</a></li>
+                    <li><a href="${pageContext.request.contextPath}/mypage/getReservationInfo.userinfo" class="tap">예약 현황</a></li>
+                    <li><a href="${pageContext.request.contextPath}/mypage/deleteUser.userinfo">회원 탈퇴</a></li>
+                </ul>
+            </div>
+            <div class="reservation-check">
+                <p>예약 현황</p>
+                <div class="container res-list">
+                    <h2>예약 내역</h2>
+                    <hr>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>예약 ID</th>
+                                <th>예약자 이름</th>
+                                <th>공연 날짜</th>
+                                <th>장소</th>
+                                <th>상태</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="reservation" items="${reservations}">
+                                <tr class="accordion-toggle" data-toggle="collapse" data-target="#collapse${reservation.resNum}" aria-expanded="false" aria-controls="collapse${reservation.resNum}">
+                                    <td>${reservation.resNum}</td>
+                                    <td>${reservation.userName}</td>
+                                    <td>${reservation.resDate}</td>
+                                    <td>${reservation.locaId}</td>
+                                    <td>${reservation.resResult}</td>
+                                </tr>
+                                <tr id="collapse${reservation.resNum}" class="collapse">
+                                    <td colspan="5">
+                                        <div class="panel-body">
+                                            <p>시설물: ${reservation.resAmp}</p>
+                                            <p>공연 내용: ${reservation.resContent}</p>
+                                            <p>인원수: ${reservation.resCount}</p>
+                                            <p>휴대폰번호: ${reservation.userPno}</p>
+                                            <p>이메일: ${reservation.userEmail}</p>
+                                            <p>주소: ${reservation.userAddr}</p>
+                                            <p>시간: ${reservation.resTime}</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<%@ include file="../include/footer.jsp" %>
+   <script>
+        // JavaScript 코드
+        $(document).ready(function() {
+            // 클릭 이벤트 처리
+            $('.accordion-toggle').click(function(event) {
+                // 클릭된 요소가 버튼인 경우는 아코디언 효과를 발생시키지 않음
+                if ($(this).is('button') || $(this).closest('button').length > 0) {
+                    return;
+                }
+         
+                // 클릭된 요소가 버튼이 아니면 아코디언 효과 토글
+                $(this).next('.collapse').collapse('toggle');
+            });
+
+  
+            $('.modify').click(function(event) {
+            event.stopPropagation(); // 이벤트 버블링 방지
+            $(this).closest('tr').next('.collapse').collapse('hide');
+            });
+ 
+        });
+    </script>
+    
+</body>
+</html>

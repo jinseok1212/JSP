@@ -1,0 +1,5 @@
+ackage com.busking.mypage.model;
+
+public class MypageDTO {
+
+}

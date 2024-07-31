@@ -1,0 +1,54 @@
+package com.busking.util.filter;
+
+import java.io.IOException;
+
+import com.busking.mypage.model.UserJoinDTO;
+import com.busking.mypage.service.UserJoinServiceImpl;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@WebFilter("/*")
+public class KeepLoginAuthenticationFilter implements Filter{
+
+    private UserJoinServiceImpl userJoinService;
+    
+	public KeepLoginAuthenticationFilter() {
+        this.userJoinService = new UserJoinServiceImpl();
+    }
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        HttpSession session = httpRequest.getSession(false);
+        
+        if (session == null || session.getAttribute("user") == null) {
+            Cookie[] cookies = httpRequest.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("keepLogin".equals(cookie.getName())) {
+                        String userId = cookie.getValue();
+                        if (userId != null && !userId.isEmpty()) {
+                            UserJoinDTO user = userJoinService.findUserId(userId);
+                            if (user != null) {
+                                session = httpRequest.getSession(true);
+                                session.setAttribute("user", user);
+                                session.setAttribute("userId", userId);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+	}
+
+}

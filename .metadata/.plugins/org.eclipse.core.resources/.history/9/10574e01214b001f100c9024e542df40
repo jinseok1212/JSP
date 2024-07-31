@@ -1,0 +1,18 @@
+package com.busking.mypage.model;
+
+import java.sql.Date;
+
+public class ReservationCheckDTO {
+	private int resNum;
+	private String userName;
+	private Date resDate;
+	private int locaId;
+	private String resResult;
+	private String resAmp;
+	private String resContent;
+	private int resCount;
+	private String userAddr;
+	private String userPno;
+	private String userEmail;
+	
+}
